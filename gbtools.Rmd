@@ -4,6 +4,7 @@ output: html_document
 ---
 
 ```{r}
+install.packages("/home/ransorge/teaching/R_packages/Rcpp_0.12.15.tar.gz",repos=NULL,type="source")
 install.packages("/home/ransorge/teaching/R_packages/sp_1.2-7.tar.gz",repos=NULL,type="source")
 install.packages("/home/ransorge/teaching/R_packages/plyr_1.8.4.tar.gz",repos=NULL,type="source")
 install.packages("/home/ransorge/programs/genome-bin-tools/R_source_package/gbtools_2.5.8.tar.gz",repos=NULL,type="source")
@@ -15,8 +16,6 @@ install.packages("/home/ransorge/programs/genome-bin-tools/R_source_package/gbto
 library(plyr)
 library(sp)
 library(gbtools)
-library(ggplot2)
-
 
 ```
 
@@ -25,26 +24,25 @@ library(ggplot2)
 # make sure to remove "#" from covstats file!
 
 # If you have a single coverage table, give the filename at the covstats= option
-d <- gbt(covstats="/home/rebecca/Downloads/marmics/909_A.covstats.txt", mark="/home/rebecca/Downloads/marmics/gbtools_in/phylotype.result.parsed",
-marksource="phylaAmphora",
-ssu="~/Downloads/marmics/gbtools_in/rRNA_909_A.ssu.tab")
+d <- gbt(covstats="/home/ransore/teaching/909_A.covstats.txt")
           
- # With two or more coverage tables, you can import them together with the c() function
-# > d <- gbt(covstats=c("HPminus.coverage","HPplus.coverage"), 
-# + mark="phylotype.result.parsed",
-# + marksource="amphora2",
-# + ssu="HPminus.ssu.tab",
-# + trna="HPminus.trna.tab")
-
 ```
 
 ```{r plot coverage-GC plot}
 
 plot(d) # simple plot
 #plot(d,cutoff=2000) # Do not show scaffolds shorter than 2000 bp
-plot(d, taxon="Genus",legend=TRUE) # show marker genes
-plot(d, taxon="Genus",legend=TRUE, ssu=TRUE,textlabel=TRUE) # add 16S marker
 
+```
+
+```{r highlight saved bin created with other binning tool}
+
+plot(d,marker=FALSE,slice=1) # The underlying GC-coverage plot, with coloring turned off
+
+# import external bin (e.g. from metabat)
+bin5.contigNames <- scan(file="/home/ransore/teaching/909_A.metabat.1.contigNames",what=character())
+d.bin5 <- gbtbin(shortlist=bin5.contigNames,x=d,slice=NA)
+points(d.bin5,col="green",slice=1)
 
 ```
 
@@ -52,22 +50,7 @@ plot(d, taxon="Genus",legend=TRUE, ssu=TRUE,textlabel=TRUE) # add 16S marker
 
 # save a bin manually from coverage-gc plot
 bin1 <- choosebin(d, slice=1, save=TRUE, file="bin1.909_A.list")
-
-bin2 <- winnow(d,slice=1, covmin=150, covmax=500) # Return the subset of contigs in d which have coverage above 200 in sample 1
-bin3 <- winnow(d,gc=c(0.5,0.7),len=c(1000,Inf)) # Return the subset of scaffolds in d that have GC between 20-50%, and length above 1000
+#bin2 <- winnow(d,slice=1, covmin=150, covmax=500) # Return the subset of contigs in d which have coverage above 200 in sample 1
+#bin3 <- winnow(d,gc=c(0.5,0.7),len=c(1000,Inf)) # Return the subset of scaffolds in d that have GC between 20-50%, and length above 1000
 #bin4 <- winnow(d,slice=c(1,2),covmin=c(200,300),covmax=c(Inf,5000)) # Subset of contigs that have coverage above 200 in sample 1, and between 300-5000 in sample 2.
-```
-
-```{r highlight saved bin created with gbtools or any binning tool}
-
-plot(d,marker=FALSE,slice=1) # The underlying GC-coverage plot, with coloring turned off
-points(bin2,col="blue",slice=1) # The new bin in blue
-points(bin1,col="black",slice=1)
-points(bin3,col="red",slice=1)
-
-# import external bin (e.g. from metabat)
-bin5.contigNames <- scan(file="/home/rebecca/Downloads/marmics/gbtools_in/909_A.metabat.1.contigNames",what=character())
-d.bin5 <- gbtbin(shortlist=bin5.contigNames,x=d,slice=NA)
-points(d.bin5,col="green",slice=1)
-
 ```
