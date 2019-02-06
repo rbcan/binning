@@ -4,10 +4,10 @@ output: html_document
 ---
 
 ```{r}
-install.packages("/home/ransorge/teaching/R_packages/Rcpp_0.12.15.tar.gz",repos=NULL,type="source")
-install.packages("/home/ransorge/teaching/R_packages/sp_1.2-7.tar.gz",repos=NULL,type="source")
-install.packages("/home/ransorge/teaching/R_packages/plyr_1.8.4.tar.gz",repos=NULL,type="source")
-install.packages("/home/ransorge/programs/genome-bin-tools/R_source_package/gbtools_2.5.8.tar.gz",repos=NULL,type="source")
+install.packages("/bioinf/transfer/Marmics_SPMG2019/software/Rcpp_1.0.0.tar.gz",repos=NULL,type="source")
+install.packages("/bioinf/transfer/Marmics_SPMG2019/software/plyr_1.8.4.tar.gz",repos=NULL,type="source")
+install.packages("/bioinf/transfer/Marmics_SPMG2019/software/sp_1.3-1.tar.gz",repos=NULL,type="source")
+install.packages("/bioinf/transfer/Marmics_SPMG2019/software/genome-bin-tools/R_source_package/gbtools_2.6.0.tar.gz",repos=NULL,type="source")
 
 ```
 
